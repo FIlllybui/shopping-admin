@@ -3,8 +3,8 @@
 namespace App\Filament\Resources\OrderResouceResource\Widgets;
 
 use Filament\Widgets\ChartWidget;
-use App\Models\Category;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 
 class Top_product extends ChartWidget
@@ -16,12 +16,8 @@ class Top_product extends ChartWidget
         $categories = Category::all();
         $datasets = [];
         $labels = [];
-        $colors = [
-            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
-            '#FF9F40', '#FF6384', '#C9CBCF', '#4BC0C0', '#FF6384'
-        ];
 
-        foreach ($categories as $index => $category) {
+        foreach ($categories as $category) {
             $topProducts = Product::where('category_id', $category->id)
                 ->join('order_product', 'products.id', '=', 'order_product.product_id')
                 ->select('products.name', DB::raw('SUM(order_product.quantity) as total_sold'))
@@ -30,15 +26,15 @@ class Top_product extends ChartWidget
                 ->limit(10)
                 ->get();
 
+            $data = $topProducts->pluck('total_sold')->toArray();
+            $productLabels = $topProducts->pluck('name')->toArray();
+
             $datasets[] = [
                 'label' => $category->name,
-                'data' => $topProducts->pluck('total_sold')->toArray(),
-                'backgroundColor' => $colors[$index % count($colors)],
+                'data' => $data,
             ];
 
-            $labels = array_merge($labels, $topProducts->pluck('name')->map(function ($name, $key) use ($topProducts) {
-                return $name . ' (' . $topProducts[$key]->total_sold . ')';
-            })->toArray());
+            $labels = array_merge($labels, $productLabels);
         }
 
         return [
@@ -50,38 +46,5 @@ class Top_product extends ChartWidget
     protected function getType(): string
     {
         return 'bar';
-    }
-
-    protected function getOptions(): array
-    {
-        return [
-            'scales' => [
-                'y' => [
-                    'beginAtZero' => true,
-                    'title' => [
-                        'display' => true,
-                        'text' => 'Number of Products Sold',
-                    ],
-                ],
-                'x' => [
-                    'title' => [
-                        'display' => true,
-                        'text' => 'Products',
-                    ],
-                ],
-            ],
-            'plugins' => [
-                'legend' => [
-                    'position' => 'top',
-                ],
-                'tooltip' => [
-                    'callbacks' => [
-                        'label' => "function(context) {
-                            return context.dataset.label + ': ' + context.parsed.y;
-                        }",
-                    ],
-                ],
-            ],
-        ];
     }
 }
