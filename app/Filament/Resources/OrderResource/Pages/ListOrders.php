@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\OrderResource\Pages;
 
 use App\Filament\Resources\OrderResouceResource\Widgets\CategorySaleChart;
+use App\Filament\Resources\OrderResouceResource\Widgets\Top_product;
 use App\Filament\Resources\OrderResource;
 use App\Filament\Resources\OrderResource\Widgets\OrderOverview;
 use App\Models\Order;
@@ -25,6 +26,7 @@ class ListOrders extends ListRecords
         return [
             OrderOverview::class,
             CategorySaleChart::class,
+            Top_product::class,
         ];
     }
 }

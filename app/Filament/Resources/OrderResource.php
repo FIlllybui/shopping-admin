@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\OrderResouceResource\Widgets\CategorySaleChart;
+use App\Filament\Resources\OrderResouceResource\Widgets\Top_product;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers\ProductsRelationManager;
 use App\Filament\Resources\OrderResource\Widgets\OrderOverview;
@@ -110,6 +111,7 @@ class OrderResource extends Resource
         return [
             OrderOverview::class,
             CategorySaleChart::class,
+            Top_product::class,
         ];
     }
     

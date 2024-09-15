@@ -4,7 +4,6 @@ namespace App\Filament\Resources\OrderResouceResource\Widgets;
 
 use Filament\Widgets\ChartWidget;
 use App\Models\Category;
-use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 
 class CategorySaleChart extends ChartWidget
@@ -20,11 +19,17 @@ class CategorySaleChart extends ChartWidget
             ->groupBy('categories.id', 'categories.name')
             ->get();
 
+        $colors = [
+            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+            '#FF9F40', '#FF6384', '#C9CBCF', '#4BC0C0', '#FF6384'
+        ];
+
         return [
             'datasets' => [
                 [
                     'label' => 'Sales',
                     'data' => $categorySales->pluck('total_sales')->toArray(),
+                    'backgroundColor' => array_slice($colors, 0, $categorySales->count()),
                 ],
             ],
             'labels' => $categorySales->pluck('name')->toArray(),
