@@ -17,7 +17,7 @@ class Product extends Model
         'image_url',
         'category_id',
     ];
-    
+
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -25,11 +25,6 @@ class Product extends Model
 
     public function orders()
     {
-        return $this->belongsToMany(Order::class);
-    }
-
-    public function orderProducts()
-    {
-        return $this->hasMany(OrderProduct::class)->withPivot('quantity', 'price');
+        return $this->belongsToMany(Order::class)->withPivot('quantity', 'price');
     }
 }
