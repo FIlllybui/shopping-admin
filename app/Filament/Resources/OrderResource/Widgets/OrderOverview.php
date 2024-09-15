@@ -14,8 +14,6 @@ class OrderOverview extends BaseWidget
             Stat::make('รายการสั่งซื้อทั้งหมด', Order::count())
                 ->description('รายการสั่งซื้อทั้งหมดในระบบ')
                 ->descriptionIcon('heroicon-m-arrow-trending-up'),
-
-                
         ];
     }
 }
